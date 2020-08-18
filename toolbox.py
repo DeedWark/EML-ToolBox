@@ -11,7 +11,11 @@ import json
 
 #yellow color / Term display
 def yellowtxt(yellow):
-    print(f"\033[93m {yellow}\033[00m")
+    print(f"\033[93m{yellow}\033[00m")
+def greentxt(green):
+    print(f"\033[92m{green}\033[00m")
+def error(err):
+    print(f"\033[91m{err}\033[00m")
 
 yellowtxt("""
  ___ __  __ _      _____         _ ___
@@ -30,12 +34,9 @@ choice = input("""
         [0] Exit 
         >>> """)
 
-#RED ERROR"
-def error(err):
-    print(f"\033[91m {err}\033[00m")
-
 #1 READ EML HEADER#
 def reademl():
+    os.listdir(".")
     filepath = input("\nEnter file path: ")
     emlFile = open(filepath, "r")
     msg = email.message_from_file(emlFile)
@@ -45,7 +46,8 @@ def reademl():
     header = parser.parsestr(msg.as_string())
 
     for h in header.items():
-        print(h)
+        print(*h)
+    print()
 
 #2 DECODE#
 def decode():
@@ -74,47 +76,47 @@ def encode():
             error("Please enter a valid utf-8 string!")
 
 #4 SEND AN EMAIL#
-def send():
-    fromaddr = input("\nMAIL FROM: ")
-    toaddr = input("RCPT TO: ")
+def sendmail():
+    sender = input("\nMAIL FROM: ")
+    receiver = input("RCPT TO: ")
     subject = input("SUBJECT: ")
-    content = input("DATA: ")
-    msg = """\
-            From: "%s"\r\n\
-            To: "%s"\r\n\
-            Subject: "%s"\r\n\
-            \r\n\
-            "%s"
-            """ % (fromaddr,",".join(toaddr),subject,content)
+    alias = input("Alias / From (ex: ToolBox <toolbox@python.org>): ")
+    content = input("CONTENT (Ctrl+Enter for return): ")
 
+    contentmore = f"""From: {alias}\nTo: {receiver}\nSubject: {subject}\n\n{content}"""
     try:
-        server = smtplib.SMTP('smtp.yopmail.com', 25)
-        server.sendmail(fromaddr, toaddr, msg)
-        return {"code": "250", "message": "OK"}
+        smtpObj = smtplib.SMTP('mail.accordmail.net', 25)
+        smtpObj.sendmail(sender, receiver, contentmore)
+        greentxt("250: Message sent")
     except smtplib.SMTPException as e:
+        error("Error - Message not sent!")
         print(e)
-    server.quit()
+    smtpObj.quit()
 
 #5 SEND AN EML AS EMAIL
 def sendeml():
-    fromaddr = input("\nMAIL FROM: ")
-    toaddr = input("RCPT TO: ")
-    eml_path = input("path of your EML: ")
+    eml_path = input("\nPath of your EML: ")
+    
     try:
         eml_file = open(eml_path, "r")
         msg = email.message_from_file(eml_file)
-        eml_file.close()
     except:
-        print("Bad path/file | Error")
-
+        error("Bad path/file | Error")
+        exit()
+    
+    sender = input("MAIL FROM: ")
+    receiver = input("RCPT TO: ")
+    
     try:
-        server = smtplib.SMTP('smtp.yopmail.com', 25)
-        server.helo = "goto.fr"
-        result_smtp = server.sendmail(fromaddr, toaddr, msg.as_string())
+        server = smtplib.SMTP('mail.accordmail.net', 25)
+        server.sendmail(sender, receiver, msg.as_string())
         server.quit()
-        return {"code": "250", "message": "OK"}
+        greentxt("250: Message sent")
     except smtplib.SMTPException as e:
+        error("Error - Message not sent!")
         print(e)
+    eml_file.close()
+    server.close()
 
 #6 SCAN AN EMAIL#
 def scanfile():
