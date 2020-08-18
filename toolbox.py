@@ -123,11 +123,15 @@ def scanfile():
     chfile = input("\nPath of your file: ")
     url = 'https://www.virustotal.com/vtapi/v2/file/scan'
     params = {'apikey': 'f01114f93052b4534fce7308988ff069df6b1ef9bb2383723bb38872aa0d56dc'}
-    files = {'file': (f'{chfile}', open(f'{chfile}', 'rb'))}
-    response = requests.post(url, files=files, params=params)
-    dataa = response.json()
-    perma = dataa['permalink']
-    print("Scan URL: "+perma)
+    try:
+        files = {'file': (f'{chfile}', open(f'{chfile}', 'rb'))}
+        response = requests.post(url, files=files, params=params)
+        dataa = response.json()
+        perma = dataa['permalink']
+        print("Scan URL: "+perma)
+    except:
+        error("bad path/file | Error")
+        exit()
 
 #USER CHOICE
 if choice == "1":
