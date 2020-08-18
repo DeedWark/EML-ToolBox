@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 
 import os
+import email
+import email.parser
+from email.parser import HeaderParser
 import base64
 import smtplib
-import email
 import requests
 import json
 
+#yellow color / Term display
 def yellowtxt(yellow):
     print(f"\033[93m {yellow}\033[00m")
 
@@ -21,16 +24,28 @@ choice = input("""
         [1] Read EML header
         [2] Decode base64 to text
         [3] Encode text to base64
-        [4] Send an email
-        [5] Send an EML as email
-        [6] Scan an EML
-        [7] Diff 2 EML headers
+        [4] Send an email (new)
+        [5] SEND an EML as email
+        [6] SCAN an EML
         [0] Exit 
         >>> """)
 
 #RED ERROR"
 def error(err):
     print(f"\033[91m {err}\033[00m")
+
+#1 READ EML HEADER#
+def reademl():
+    filepath = input("\nEnter file path: ")
+    emlFile = open(filepath, "r")
+    msg = email.message_from_file(emlFile)
+    emlFile.close()
+
+    parser = email.parser.HeaderParser()
+    header = parser.parsestr(msg.as_string())
+
+    for h in header.items():
+        print(h)
 
 #2 DECODE#
 def decode():
@@ -45,9 +60,6 @@ def decode():
         except:
             error("Please enter a valid base64 string!")
 
-if choice == "2":
-    decode()
-
 #3 ENCODE#
 def encode():
     b64txt = input("\nEnter txt string: ")
@@ -60,9 +72,6 @@ def encode():
             print(b64_txt)
         except:
             error("Please enter a valid utf-8 string!")
-
-if choice == "3":
-    encode()
 
 #4 SEND AN EMAIL#
 def send():
@@ -86,9 +95,6 @@ def send():
         print(e)
     server.quit()
 
-if choice == "4":
-    send()
-
 #5 SEND AN EML AS EMAIL
 def sendeml():
     fromaddr = input("\nMAIL FROM: ")
@@ -110,23 +116,32 @@ def sendeml():
     except smtplib.SMTPException as e:
         print(e)
 
-if choice == "5":
-    sendeml()
-
 #6 SCAN AN EMAIL#
-chfile = input("\nPath of your file: ")
-url = 'https://www.virustotal.com/vtapi/v2/file/scan'
-params = {'apikey': 'f01114f93052b4534fce7308988ff069df6b1ef9bb2383723bb38872aa0d56dc'}
-files = {'file': (f'{chfile}', open(f'{chfile}', 'rb'))}
-response = requests.post(url, files=files, params=params)
-dataa = response.json()
-perma = dataa['permalink']
-print("Scan URL: "+perma)
+def scanfile():
+    chfile = input("\nPath of your file: ")
+    url = 'https://www.virustotal.com/vtapi/v2/file/scan'
+    params = {'apikey': 'f01114f93052b4534fce7308988ff069df6b1ef9bb2383723bb38872aa0d56dc'}
+    files = {'file': (f'{chfile}', open(f'{chfile}', 'rb'))}
+    response = requests.post(url, files=files, params=params)
+    dataa = response.json()
+    perma = dataa['permalink']
+    print("Scan URL: "+perma)
 
+#USER CHOICE
+if choice == "1":
+    reademl()
+elif choice == "2":
+    decode()
+elif choice == "3":
+    encode()
+elif choice == "4":
+    sendmail()
+elif choice == "5":
+    sendeml()
+elif choice == "6":
+    scanfile()
+elif choice == "7":
+    diff2headers()
+else:
+    yellowtxt("\nGood Bye Sir!")
 
-#7 DIFF 2 EML HEADERS#
-
-
-#EXIT#
-if choice == "0":
-    print("\nGood bye sir!")
