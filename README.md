@@ -2,7 +2,7 @@
 
 Useful EML/E-mail tools in a simple python script
 
-```rust
+```swift
  ___ __  __ _      _____         _ ___
 | __|  \/  | |    |_   _|__  ___| | _ ) _____ __
 | _|| |\/| | |__    | |/ _ \/ _ \ | _ \/ _ \ \ /
