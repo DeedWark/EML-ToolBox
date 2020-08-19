@@ -49,7 +49,7 @@ def reademl():
         print(*h)
     print()
 
-#2 DECODE#
+#2 DECODE BASE64#
 def decode():
     text = input("\nEnter base64 string: ")
     if text:
@@ -62,7 +62,7 @@ def decode():
         except:
             error("Please enter a valid base64 string!")
 
-#3 ENCODE#
+#3 ENCODE BASE64#
 def encode():
     b64txt = input("\nEnter txt string: ")
     if b64txt:
@@ -93,7 +93,7 @@ def sendmail():
         print(e)
     smtpObj.quit()
 
-#5 SEND AN EML AS EMAIL
+#5 SEND AN EML AS EMAIL#
 def sendeml():
     eml_path = input("\nPath of your EML: ")
 
@@ -118,39 +118,34 @@ def sendeml():
     eml_file.close()
     server.close()
 
-#6 SCAN AN EMAIL#
+#6 SCAN AN EMAIL (VirusTotal API)#
 def scanfile():
     chfile = input("\nPath of your file: ")
-    url = 'https://www.virustotal.com/vtapi/v2/file/scan'
-    url_res = 'https://www.virustotal.com/vtapi/v2/file/report'
-    params = {'apikey': 'f01114f93052b4534fce7308988ff069df6b1ef9bb2383723bb38872aa0d56dc'}
-    #res = dataa['resource']
-    #params_res = {'apikey': 'f01114f93052b4534fce7308988ff069df6b1ef9bb2383723bb38872aa0d56dc', 'resource': '{}'.format(res)}
     try:
+        url = 'https://www.virustotal.com/vtapi/v2/file/scan'
         files = {'file': (f'{chfile}', open(f'{chfile}', 'rb'))}
+        params = {'apikey': 'f01114f93052b4534fce7308988ff069df6b1ef9bb2383723bb38872aa0d56dc'}
         response = requests.post(url, files=files, params=params)
         dataa = response.json()
         perma = dataa['permalink']
         print("Scan URL: "+perma)
-        #res = dataa['resource']
-        #params_res = {'apikey': 'f01114f93052b4534fce7308988ff069df6b1ef9bb2383723bb38872aa0d56dcce', 'resource': '{}'.format(res)}
-        #response_res = requests.get(url_res, params=params_res)
-        #dataa_res = response_res.json()
-        #print("\n"+dataa_res)
     except:
-        error("bad path/file | Error")
+        error("Bad path/file | Error")
         exit()
-
+    print()
     try:
-	res = dataa['resource']
-        params_res_res = {'apikey': 'f01114f93052b4534fce7308988ff069df6b1ef9bb2383723bb38872aa0d56dcce', 'resource': '{}'.format(res)}
-	response_res = requests.get(url_res, params=params_res)
-	dataa_res = response.json()
-	print("\n"+dataa_res)
-    except:
-        print("NO")
+        url_res = 'https://www.virustotal.com/vtapi/v2/file/report'
+        res = dataa['resource']
+        params_res = {'apikey': 'f01114f93052b4534fce7308988ff069df6b1ef9bb2383723bb38872aa0d56dc', 'resource': '{}'.format(res)}
 
-#USER CHOICE
+        response_res = requests.get(url_res, params=params_res)
+
+        dataa_res = response_res.json()
+        print(dataa_res)
+    except:
+        print("Bad resource | Check the link")
+
+#USER CHOICE#
 if choice == "1":
     reademl()
 elif choice == "2":
@@ -163,8 +158,5 @@ elif choice == "5":
     sendeml()
 elif choice == "6":
     scanfile()
-elif choice == "7":
-    diff2headers()
 else:
     yellowtxt("\nGood Bye Sir!")
-
