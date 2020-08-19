@@ -141,7 +141,8 @@ def scanfile():
         response_res = requests.get(url_res, params=params_res)
 
         dataa_res = response_res.json()
-        print(dataa_res)
+        format_res = json.dumps(dataa_res, indent=4)
+        print(format_res)
     except:
         print("Bad resource | Check the link")
 
