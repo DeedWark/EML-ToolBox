@@ -36,7 +36,6 @@ choice = input("""
 
 #1 READ EML HEADER#
 def reademl():
-    os.listdir(".")
     filepath = input("\nEnter file path: ")
     emlFile = open(filepath, "r")
     msg = email.message_from_file(emlFile)
