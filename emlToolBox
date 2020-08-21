@@ -101,11 +101,8 @@ def sendmail():
     contentmore = f"""From: {alias}\nTo: {receiver}\nSubject: {subject}\n\n{content}"""
     try:
         smtpObj = smtplib.SMTP(smtpServ, 25)
-        try:
-            smtpObj.sendmail(sender, receiver, contentmore)
-            greentxt("250: Message sent")
-        except:
-            error("No")
+        smtpObj.sendmail(sender, receiver, contentmore)
+        greentxt("250: Message sent")
     except smtplib.SMTPException as e:
         error("Error - Message not sent!")
         print(e)
