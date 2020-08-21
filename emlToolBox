@@ -30,13 +30,14 @@ yellowtxt("""
 |___|_|  |_|____|   |_|\___/\___/_|___/\___/_\_\\
 """)
 
-choice = input("""
+choice = input("""\
         [1] Read EML header
         [2] Decode base64 to text
         [3] Encode text to base64
         [4] Send an email (new)
         [5] Send an EML as email
         [6] Scan an EML (VirusTotal)
+        [7] Help / More info
         [0] Exit
         >>> """)
 
@@ -175,6 +176,17 @@ def scanfile():
     except:
         print("Bad resource | Check the link")
 
+def help():
+    info = """
+    (1) Show e-mail headers (.eml file)
+    (2) Decode encoded base64 string to text (utf-8) string (URL safe)
+    (3) Encode text (utf-8) string to base64 string (URL safe)
+    (4) Send an e-mail with smtplib (from (w/mail from), to, subject, data, smtp)
+    (5) Send an .eml file as e-mail (from (w/mail from), to, subject, data, smtp)
+    (6) Scan an file (With VirusTotal API | see https://www.virustotal.com/gui/home/upload for more info)
+    """
+    print(info)
+
 #USER CHOICE#
 if choice == "1":
     reademl()
@@ -188,5 +200,7 @@ elif choice == "5":
     sendeml()
 elif choice == "6":
     scanfile()
+elif choice == "7":
+    help()
 else:
     yellowtxt("\nGood Bye Sir!")
