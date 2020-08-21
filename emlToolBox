@@ -104,10 +104,11 @@ def sendmail():
         smtpObj = smtplib.SMTP(smtpServ, 25)
         smtpObj.sendmail(sender, receiver, contentmore)
         greentxt("250: Message sent")
+        smtpObj.quit()
     except smtplib.SMTPException as e:
         error("Error - Message not sent!")
         print(e)
-    smtpObj.quit()
+    
 
 #5 SEND AN EML AS EMAIL#
 def sendeml():
@@ -142,11 +143,12 @@ def sendeml():
         server.sendmail(sender, receiver, msg.as_string())
         server.quit()
         greentxt("250: Message sent")
+        server.close()
     except smtplib.SMTPException as e:
         error("Error - Message not sent!")
         print(e)
     eml_file.close()
-    server.close()
+    
 
 #6 SCAN AN EMAIL (VirusTotal API)#
 def scanfile():
