@@ -11,6 +11,7 @@ import email.parser
 from email.parser import HeaderParser
 import base64
 import smtplib
+import dns.resolver
 import requests
 import json
 
@@ -79,15 +80,32 @@ def encode():
 def sendmail():
     sender = input("\nMAIL FROM: ")
     receiver = input("RCPT TO: ")
+
+    #Get MX/SMTP
+    domain = receiver.split("@")[1]
+    mx = dns.resolver.resolve(domain, "MX")
+    for server in mx:
+        pass
+    smtp = str(server.exchange)
+    smtpServ = smtp.rstrip(".")
+
+    serv = input(f"SMTP (default: {smtpServ}): ")
+    if serv:
+        smtpServ = serv
+    else:
+        smtpServ = smtpServ
     subject = input("SUBJECT: ")
     alias = input("Alias / From (ex: ToolBox <toolbox@python.org>): ")
-    content = input("CONTENT (Ctrl+Enter for return): ")
+    content = input("CONTENT: ")
 
     contentmore = f"""From: {alias}\nTo: {receiver}\nSubject: {subject}\n\n{content}"""
     try:
-        smtpObj = smtplib.SMTP('mail.accordmail.net', 25)
-        smtpObj.sendmail(sender, receiver, contentmore)
-        greentxt("250: Message sent")
+        smtpObj = smtplib.SMTP(smtpServ, 25)
+        try:
+            smtpObj.sendmail(sender, receiver, contentmore)
+            greentxt("250: Message sent")
+        except:
+            error("No")
     except smtplib.SMTPException as e:
         error("Error - Message not sent!")
         print(e)
@@ -107,8 +125,22 @@ def sendeml():
     sender = input("MAIL FROM: ")
     receiver = input("RCPT TO: ")
 
+    #Get MX/SMTP
+    domain = receiver.split("@")[1]
+    mx = dns.resolver.resolve(domain, "MX")
+    for server in mx:
+        pass
+    smtp = str(server.exchange)
+    smtpServ = smtp.rstrip(".")
+
+    serv = input(f"SMTP (default: {smtpServ}): ")
+    if serv:
+        smtpServ = serv
+    else:
+        smtpServ = smtpServ
+
     try:
-        server = smtplib.SMTP('mail.accordmail.net', 25)
+        server = smtplib.SMTP(smtpServ, 25)
         server.sendmail(sender, receiver, msg.as_string())
         server.quit()
         greentxt("250: Message sent")
