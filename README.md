@@ -13,8 +13,9 @@ Useful EML/E-mail tools in a simple python script
         [2] Decode base64 to text
         [3] Encode text to base64
         [4] Send an email (new)
-        [5] SEND an EML as email
-        [6] SCAN an EML
+        [5] Send an EML as email
+        [6] Scan an EML (VirusTotal)
+        [7] Help / More info
         [0] Exit
         >>>
 ```
