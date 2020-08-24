@@ -50,7 +50,8 @@ def reademl():
 
     parser = email.parser.HeaderParser()
     header = parser.parsestr(msg.as_string())
-
+    print()
+    
     for h in header.items():
         print(*h)
     print()
