@@ -35,7 +35,7 @@ python3 toolbox.py
 
 ## Make easier this script
 ```bash
-mv toolbox.py /usr/bin/toolbox
+mv emltoolbox /usr/bin/emltoolbox
 
 toolbox
 ```
