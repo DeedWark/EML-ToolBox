@@ -44,17 +44,20 @@ choice = input("""\
 #1 READ EML HEADER#
 def reademl():
     filepath = input("\nEnter file path: ")
-    emlFile = open(filepath, "r")
-    msg = email.message_from_file(emlFile)
-    emlFile.close()
+    try:
+        emlFile = open(filepath, "r")
+        msg = email.message_from_file(emlFile)
+        emlFile.close()
 
-    parser = email.parser.HeaderParser()
-    header = parser.parsestr(msg.as_string())
-    print()
+        parser = email.parser.HeaderParser()
+        header = parser.parsestr(msg.as_string())
+        print()
     
-    for h in header.items():
-        print(*h)
-    print()
+        for h in header.items():
+            print(*h)
+        print()
+    except:
+        error("Bad file | Encoding error")
 
 #2 DECODE BASE64#
 def decode():
@@ -80,27 +83,32 @@ def encode():
 
 #4 SEND AN EMAIL#
 def sendmail():
-    sender = input("\nMAIL FROM: ")
-    receiver = input("RCPT TO: ")
+    try:
+        sender = input("\nMAIL FROM: ")
+        receiver = input("RCPT TO: ")
 
-    #Get MX/SMTP
-    domain = receiver.split("@")[1]
-    mx = dns.resolver.resolve(domain, "MX")
-    for server in mx:
-        pass
-    smtp = str(server.exchange)
-    smtpServ = smtp.rstrip(".")
+        #Get MX/SMTP
+        domain = receiver.split("@")[1]
+        mx = dns.resolver.resolve(domain, "MX")
+        for server in mx:
+            pass
+        smtp = str(server.exchange)
+        smtpServ = smtp.rstrip(".")
 
-    serv = input(f"SMTP (default: {smtpServ}): ")
-    if serv:
-        smtpServ = serv
-    else:
-        smtpServ = smtpServ
-    subject = input("SUBJECT: ")
-    alias = input("Alias / From (ex: ToolBox <toolbox@python.org>): ")
-    content = input("CONTENT: ")
+        serv = input(f"SMTP (default: {smtpServ}): ")
+        if serv:
+            smtpServ = serv
+        else:
+            smtpServ = smtpServ
+        subject = input("SUBJECT: ")
+        alias = input("Alias / From (ex: ToolBox <toolbox@python.org>): ")
+        content = input("CONTENT: ")
 
-    contentmore = f"""From: {alias}\nTo: {receiver}\nSubject: {subject}\n\n{content}"""
+        contentmore = f"""From: {alias}\nTo: {receiver}\nSubject: {subject}\n\n{content}"""
+    except KeyboardInterrupt:
+        error(" Interrupted!")
+        exit()
+
     try:
         smtpObj = smtplib.SMTP(smtpServ, 25)
         smtpObj.sendmail(sender, receiver, contentmore)
@@ -109,6 +117,7 @@ def sendmail():
     except smtplib.SMTPException as e:
         error("Error - Message not sent!")
         print(e)
+        exit()
     
 
 #5 SEND AN EML AS EMAIL#
@@ -122,22 +131,26 @@ def sendeml():
         error("Bad path/file | Error")
         exit()
 
-    sender = input("MAIL FROM: ")
-    receiver = input("RCPT TO: ")
+    try:
+        sender = input("MAIL FROM: ")
+        receiver = input("RCPT TO: ")
 
-    #Get MX/SMTP
-    domain = receiver.split("@")[1]
-    mx = dns.resolver.resolve(domain, "MX")
-    for server in mx:
-        pass
-    smtp = str(server.exchange)
-    smtpServ = smtp.rstrip(".")
+        #Get MX/SMTP
+        domain = receiver.split("@")[1]
+        mx = dns.resolver.resolve(domain, "MX")
+        for server in mx:
+            pass
+        smtp = str(server.exchange)
+        smtpServ = smtp.rstrip(".")
 
-    serv = input(f"SMTP (default: {smtpServ}): ")
-    if serv:
-        smtpServ = serv
-    else:
-        smtpServ = smtpServ
+        serv = input(f"SMTP (default: {smtpServ}): ")
+        if serv:
+            smtpServ = serv
+        else:
+            smtpServ = smtpServ
+    except KeyboardInterrupt:
+        error(" Interrupted!")
+        exit()
 
     try:
         server = smtplib.SMTP(smtpServ, 25)
@@ -178,6 +191,7 @@ def scanfile():
         print(format_res)
     except:
         print("Bad resource | Check the link")
+        exit()
 
 def help():
     info = """
@@ -207,3 +221,4 @@ elif choice == "7":
     help()
 else:
     yellowtxt("\nGood Bye Sir!")
+    exit()
