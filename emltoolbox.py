@@ -140,12 +140,15 @@ def sendeml():
         receiver = input("RCPT TO: ")
 
         #Get MX/SMTP
-        domain = receiver.split("@")[1]
-        mx = dns.resolver.resolve(domain, "MX")
-        for server in mx:
-            pass
-        smtp = str(server.exchange)
-        smtpServ = smtp.rstrip(".")
+        try:
+            domain = receiver.split("@")[1]
+            mx = dns.resolver.resolve(domain, "MX")
+            for server in mx:
+                pass
+            smtp = str(server.exchange)
+            smtpServ = smtp.rstrip(".")
+        except:
+            error("No SMTP server found")
 
         serv = input(f"SMTP (default: {smtpServ}): ")
         if serv:
