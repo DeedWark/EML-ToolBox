@@ -106,9 +106,18 @@ def sendmail():
             smtpServ = smtpServ
         subject = input("SUBJECT: ")
         alias = input("Alias / From (ex: ToolBox <toolbox@python.org>): ")
+        #CONTENT (Multiline)
+        multiline = []
         content = input("CONTENT: ")
+        while True:
+            contentline = input()
+            if contentline:
+                multiline.append(contentline)
+            else:
+                break
+            contentall = '\n'.join(multiline)
 
-        contentmore = f"""From: {alias}\nTo: {receiver}\nSubject: {subject}\n\n{content}"""
+        contentmore = f"""From: {alias}\nTo: {receiver}\nSubject: {subject}\n\n{contentall}"""
     except KeyboardInterrupt:
         error(" Interrupted!")
         exit()
