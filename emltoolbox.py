@@ -108,7 +108,7 @@ def sendmail():
         alias = input("Alias / From (ex: ToolBox <toolbox@python.org>): ")
         #CONTENT (Multiline)
         multiline = []
-        content = input("CONTENT: ")
+        print("CONTENT: ")
         while True:
             contentline = input()
             if contentline:
