@@ -30,12 +30,13 @@ pip3 install -r requirements.txt
 ## Usage
 
 ```bash
-python3 toolbox.py
+python3 emltoolbox.py
 ```
 
 ## Make easier this script
 ```bash
-mv emltoolbox /usr/bin/emltoolbox
+chmod +x emltoolbox.py
+mv emltoolbox.py /usr/bin/emltoolbox
 
-toolbox
+emltoolbox
 ```
